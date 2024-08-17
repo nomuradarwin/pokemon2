@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポケモンまるばつゲーム</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <div id="game" class="container text-center">
+            <h1 class="my-4">ポケモン<br>〇✖<br>ゲーム</h1>
+            
+            <div id="controlPanel">
+                <label for="cpuLevel" class="mr-2">CPUの強さ:</label>
+                <select id="cpuLevel" class="form-control mb-4 d-inline-block" style="width: auto;">
+                    <option value="weak">弱い</option>
+                    <option value="normal" selected>普通</option>
+                    <option value="strong">強い</option>
+                </select>
+                <button id="startButton" class="btn btn-success mb-4">GAME START</button>
+            </div>
+
+            <div id="turn-indicator" class="alert alert-info d-none">ターン決定中...</div>
+            
+            <div id="board" class="d-flex flex-wrap justify-content-center d-none">
+                <!-- ゲームのマス目 -->
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+            </div>
+        </div>
+
+        <!-- STOPボタンをcontent-wrapperの下部に配置 -->
+        <div class="stop-button-container">
+            <button id="stopButton" class="btn btn-danger btn-lg d-none">STOP</button>
+        </div>
+    </div>
+    
+    <!-- キャラクター選択モーダル -->
+    <div id="characterSelectionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="characterSelectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="characterSelectionModalLabel">キャラクターを選択してください</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="characters" class="d-flex flex-wrap justify-content-center">
+                        <!-- キャラクター選択 -->
+                        <div class="character" data-character="ジラーチ">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/33b0d2c0d0048ff76f152860c2ab6e26.png" alt="ジラーチ">
+                        </div>
+                        <div class="character" data-character="ラティアス">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/d647ec35e9307a2c9cdbf62e86c7f4bd.png" alt="ラティアス">
+                        </div>
+                        <div class="character" data-character="ラティオス">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/e6d21e3714930bb74643f08587c943be.png" alt="ラティオス">
+                        </div>
+                        <div class="character" data-character="ピチュー">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/78023852b48998ab5681e1bdc0d6333a.png" alt="ピチュー">
+                        </div>
+                        <div class="character" data-character="ピカチュウ">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/5bb0cfd44302cd4df0c0c88d37457931.png" alt="ピカチュウ">
+                        </div>
+                        <div class="character" data-character="カイオーガ">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/7521d3369da8ddfca9be14fa74cf6c2b.png" alt="カイオーガ">
+                        </div>
+                        <div class="character" data-character="グラードン">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/45d077caac375975f6e77246fd9a72f0.png" alt="グラードン">
+                        </div>
+                        <div class="character" data-character="プラスル">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/415a6836056e86abd6b25d067b6dbf64.png" alt="プラスル">
+                        </div>
+                        <div class="character" data-character="マイナン">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/4dbd7256575781ef5066eb63879969ca.png" alt="マイナン">
+                        </div>
+                        <div class="character" data-character="レックウザ">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/85fbbb44dd266379ee08caac27d89648.png" alt="レックウザ">
+                        </div>
+                        <div class="character" data-character="イーブイ">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/326507f5595907c72d74ac8ea686a6ce.png" alt="イーブイ">
+                        </div>
+                        <div class="character" data-character="デオキシス">
+                            <img src="https://zukan.pokemon.co.jp/zukan-api/up/images/index/42b0bc1fa74ddb6b6dd2706c1338f98a.png" alt="デオキシス">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- モーダルポップアップ -->
+    <div class="modal fade" id="winningMessageModal" tabindex="-1" aria-labelledby="winningMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="winningMessageModalLabel">ゲーム終了</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div data-winning-message-text></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="restartButton" class="btn btn-primary">もう一度プレイ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BGMオーディオ要素 -->
+    <audio id="bgm" src="https://raw.githubusercontent.com/nomuradarwin/BGM/main/Festival!.mp3" loop></audio>
+    <audio id="bgm" src="https://raw.githubusercontent.com/nomuradarwin/BGM/main/%E4%B8%AD%E5%9B%BD%E8%8C%B6.mp3" loop></audio>
+    <audio id="bgm" src="https://raw.githubusercontent.com/nomuradarwin/BGM/main/%E6%98%BC%E4%B8%8B%E3%81%8C%E3%82%8A%E6%B0%97%E5%88%86.mp3" loop></audio>
+
+   
+
+    <!-- 効果音オーディオ要素 -->
+    <audio id="startSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E6%B1%BA%E5%AE%9A%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%995.mp3"></audio>
+    <audio id="clickSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E6%B1%BA%E5%AE%9A%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%9950.mp3"></audio>
+    <audio id="cpuClickSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E5%8F%AF%E6%84%9B%E3%81%84%E5%8B%95%E4%BD%9C1%20(1).mp3"></audio>
+    <audio id="playerWinSound1" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E3%81%A9%E3%82%93%E3%81%A9%E3%82%93%E3%83%91%E3%83%95%E3%83%91%E3%83%95.wav"></audio>
+    <audio id="playerWinSound2" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E3%80%8C%E3%82%84%E3%81%A3%E3%81%9F%EF%BC%81%E3%80%8D.mp3"></audio>
+    <audio id="playerLoseSound1" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E3%80%8C%E3%81%BB%E3%80%81%E6%98%9F%E3%81%8C%E8%A6%8B%E3%81%88%E3%82%8B%E3%81%85%E2%80%A6%E3%80%8D.mp3"></audio>
+    <audio id="playerLoseSound2" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E3%80%8C%E3%81%8F%E3%81%A3%E3%80%81%E3%81%93%E3%82%93%E3%81%AA%E3%81%AF%E3%81%9A%E3%81%A7%E3%81%AF%E2%80%A6%E2%80%A6%E3%80%8D.mp3"></audio>
+    <audio id="restartSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E6%B1%BA%E5%AE%9A%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%9912.mp3"></audio>
+    <audio id="rouletteStartSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E9%9B%BB%E5%AD%90%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88.mp3"></audio>
+    <audio id="rouletteStopSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E9%9B%BB%E5%AD%90%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88%E5%81%9C%E6%AD%A2%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%99.mp3"></audio>
+    <audio id="rouletteSpinSound" src="https://raw.githubusercontent.com/nomuradarwin/SE/main/%E9%9B%BB%E5%AD%90%E3%83%AB%E3%83%BC%E3%83%AC%E3%83%83%E3%83%88%E5%9B%9E%E8%BB%A2%E4%B8%AD.mp3"></audio>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

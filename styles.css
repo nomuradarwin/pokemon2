@@ -1,0 +1,131 @@
+/* 基本スタイル */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+    background-image: url(https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEicP5lru16Y8Sh5sfeqG4sb3QfxIyd4Y1yqYkMiqC-ok-SdeKhZ7_kazKeoOjv4xaCyWiJW63GNVcR-cAJ0S5uvhkaeLWVBcRN4jOLS2xHh-__cImAvq_SSD-ZYKzqsBhJ_JYYoDf_QoMzD/s1600/bg_natural_ocean.jpg);
+    background-size: cover;
+    margin: 0;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-height: 600px; /* 高さを確保しておく */
+}
+
+#startButton {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+#turn-indicator {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 24px;
+}
+
+.stop-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: -60px; /* 30px下に移動 */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #83cdd7;
+}
+
+#characters {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.character img {
+    width: 100%;
+    height: auto;
+    max-width: 80px;
+    max-height: 80px;
+}
+
+
+#game {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+#controlPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#controlPanel select {
+    margin-bottom: 10px;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+    margin: 0 auto;
+    width: 310px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #bae0eb;
+    border: 1px solid #9fdcec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+    position: relative;
+}
+
+.cell img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.winning-message {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.winning-message.show {
+    display: block;
+}
